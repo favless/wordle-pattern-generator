@@ -1,17 +1,19 @@
-async function getPatternWords(word, pattern) {
+async function getPatternWords(pattern) {
   // Fetch the Wordle word list
   const response = await fetch('https://raw.githubusercontent.com/tabatkins/wordle-list/main/words');
   const wordListText = await response.text();
   const wordList = wordListText.trim().split('\n').map(w => w.toUpperCase());
+
+  const word = document.getElementById("dailyword").value
 
   const targetWord = word.toUpperCase();
   const validWords = [];
 
   // For each word in the list, check if it matches the pattern
   for (const candidate of wordList) {
-    if (matchesPattern(candidate, targetWord, pattern)) {
+    if (matchesPattern(candidate, targetWord, pattern) && candidate != word) {
       validWords.push(candidate);
-      if (validWords.length >= 5) {
+      if (validWords.length >= 1) {
         break;
       }
     }
@@ -20,53 +22,45 @@ async function getPatternWords(word, pattern) {
   return validWords;
 }
 
+let strictMode = true
+
 function matchesPattern(candidate, targetWord, pattern) {
   if (candidate.length !== 5 || targetWord.length !== 5 || pattern.length !== 5) {
     return false;
   }
 
-  // Simulate what Wordle would actually show for this candidate
-  const actualPattern = getWordlePattern(candidate, targetWord);
-  
-  // Convert our F/E pattern to G/Y/B (Green/Yellow/Black)
-  const expectedPattern = [];
-  for (let i = 0; i < 5; i++) {
-    if (pattern[i] === 'F') {
-      // F means either Green (correct position) or Yellow (wrong position)
-      if (candidate[i] === targetWord[i]) {
-        expectedPattern[i] = 'G';
+  // Get what Wordle would actually show for this candidate
+  const actualPattern = checkWordAgainstTarget(candidate, targetWord);
+
+  if (strictMode) {
+    // Strict mode: exact pattern match (G must be G, Y must be Y, E must be E)
+    const actualPatternString = actualPattern.join('');
+    return actualPatternString === pattern;
+  } else {
+    // Loose mode: treat G and Y as just "filled"
+    for (let i = 0; i < 5; i++) {
+      if (pattern[i] === 'E') {
+        // Pattern expects empty, actual must be empty
+        if (actualPattern[i] !== 'E') {
+          return false;
+        }
       } else {
-        expectedPattern[i] = 'Y';
-      }
-    } else {
-      // E means Black (not in word or already used up)
-      expectedPattern[i] = 'B';
-    }
-  }
-
-  // Check if the actual pattern matches what we expect
-  for (let i = 0; i < 5; i++) {
-    if (pattern[i] === 'F') {
-      // For filled squares, we need either Green or Yellow
-      if (actualPattern[i] !== 'G' && actualPattern[i] !== 'Y') {
-        return false;
-      }
-    } else {
-      // For empty squares, we need Black
-      if (actualPattern[i] !== 'B') {
-        return false;
+        // Pattern expects filled (G or Y), actual must be filled (G or Y)
+        if (actualPattern[i] === 'E') {
+          return false;
+        }
       }
     }
+    return true;
   }
-
-  return true;
 }
 
-function getWordlePattern(guess, target) {
-  const pattern = ['B', 'B', 'B', 'B', 'B']; // Start with all black
+// Manual word checking function that returns the pattern array with E/G/Y
+function checkWordAgainstTarget(guess, target) {
+  const pattern = ['E', 'E', 'E', 'E', 'E']; // Start with all empty
   const targetLetters = target.split('');
   const guessLetters = guess.split('');
-  
+
   // First pass: mark exact matches (green)
   for (let i = 0; i < 5; i++) {
     if (guessLetters[i] === targetLetters[i]) {
@@ -75,7 +69,7 @@ function getWordlePattern(guess, target) {
       guessLetters[i] = null; // Mark as processed
     }
   }
-  
+
   // Second pass: mark wrong position matches (yellow)
   for (let i = 0; i < 5; i++) {
     if (guessLetters[i] !== null) { // Not already processed
@@ -86,42 +80,64 @@ function getWordlePattern(guess, target) {
       }
     }
   }
-  
+
   return pattern;
 }
+
+// DONT TOUCH ANYTHING UNDER HERE!!
 
 function replaceCharAt(str, index, replacement) {
   if (index < 0 || index >= str.length) return str; // index out of bounds
   return str.slice(0, index) + replacement + str.slice(index + 1);
 }
 
-const wordInput = document.getElementById("word")
-const worddiv = document.getElementById("wordlist")
-let currentPattern = "EEEEE"
+let currentPattern = ["EEEEE", "EEEEE", "EEEEE", "EEEEE", "EEEEE", "EEEEE"]
+console.log(currentPattern[0] + "\n" + currentPattern[1] + "\n" + currentPattern[2] + "\n" + currentPattern[3] + "\n" + currentPattern[4])
 
-function toggleBox(pos, btn) {
-  if (currentPattern[pos] == "E") {
-    currentPattern = replaceCharAt(currentPattern, pos, "F")
-    btn.style.backgroundColor = "#50c04e"
-  } else {
-    currentPattern = replaceCharAt(currentPattern, pos, "E")
-    btn.style.backgroundColor = "#424242"
+function changeSpot(btn, row, col) {
+
+  if (currentPattern[row][col] == "E") {
+    currentPattern[row] = replaceCharAt(currentPattern[row], col, "Y")
+    btn.style.backgroundColor = "var(--yellow)"
+  } else if (currentPattern[row][col] == "Y") {
+    currentPattern[row] = replaceCharAt(currentPattern[row], col, "G")
+    btn.style.backgroundColor = "var(--green)"
+  } else if (currentPattern[row][col] == "G") {
+    currentPattern[row] = replaceCharAt(currentPattern[row], col, "E")
+    btn.style.backgroundColor = "var(--empty)"
   }
 
-  console.log(currentPattern)
+
+  console.log(currentPattern[0] + "\n" + currentPattern[1] + "\n" + currentPattern[2] + "\n" + currentPattern[3] + "\n" + currentPattern[4] + "\n" + currentPattern[5])
 }
 
-function returnPattern() {
-  const word = wordInput.value
+function generateWords() {
+  console.log(currentPattern[0])
+  let i = 0
+  document.querySelectorAll(".btnrow").forEach(div => {
+      getPatternWords(currentPattern[i]).then(output => {
+        const buttons = div.querySelectorAll(".letterbtn");
+        const chars = output[0]; // assuming output = ["hello"], so output[0] = "hello"
+        for (let v = 0; v < 5 && v < buttons.length; v++) {
+          if (output[0] == undefined) {
+            buttons[v].textContent = ""
+          } else {
+            buttons[v].textContent = chars[v];
+          }
+          
+        }
+        console.log(chars);
+      });
+      i += 1
+  })
+  
+}
 
-  worddiv.innerHTML = "";
-
-  getPatternWords(word, currentPattern).then(words => {
-    for (let i = 0; i < words.length; i++) {
-      const newSpan = document.createElement("span")
-      worddiv.appendChild(newSpan)
-      newSpan.classList.add("foundWord", "rubik")
-      newSpan.textContent = words[i]
-    }
-  });
+function toggleStrict(btn) {
+  strictMode = !strictMode
+  if (strictMode) {
+    btn.textContent = "STRICT"
+  } else {
+    btn.textContent = "LOOSE"
+  }
 }

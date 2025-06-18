@@ -1,3 +1,15 @@
+/* GLOBAL RULES  */
+
+:root {
+  --outline: #565759;
+  --background: #121212;
+  --text: #ffffff;
+
+  --green: #528D4D;
+  --yellow: #B59F3A;
+  --empty: #424242;
+}
+
 body {
     margin: 0px;
     display: flex;
@@ -7,7 +19,12 @@ body {
 
     height: 100dvh;
 
-    background-color: #e4e4e2;
+    background-color: var(--background)
+}
+
+.aceh {
+  font-family: 'Aceh', sans-serif;
+  font-optical-sizing: auto;
 }
 
 .oswald {
@@ -21,53 +38,125 @@ body {
   font-family: "Rubik", sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
-  font-size: 2rem;
   font-style: normal;
 }
 
-input {
-    border: 3px solid black;
-    background: none;
-    border-radius: 3px;
-    font-size: 2rem;
-    width: 200px;
-    text-align: center;
+/* ------------------------------- */
+
+/* RESPONSIVENESS  */
+
+@media screen and (max-height: 800px) {
+    .buttons {
+        height: 80dvh !important;
+    }
 }
 
-.pattern-buttons {
-  display: flex;
-  margin-top: 30px;
-  margin-bottom: 30px;
-
-  width: 600px;
-  max-width: 700px;
+@media screen and (max-height: 650px) {
+    .buttons {
+        height: 95dvh !important;
+    }
 }
 
-.pattern-buttons > button {
-  width: 20%;
-  aspect-ratio: 1 / 1;
+@media screen and (max-height: 540px) {
+    .letterbtn {
+      font-size: 2.5rem !important;
+    }
+}
 
+@media screen and (max-height: 470px) {
+    .letterbtn {
+      font-size: 2rem !important;
+    }
+}
+
+/* --------------------------------- */
+
+.buttons {
+  height: 65dvh;
+  aspect-ratio: 5 / 8 ;
+
+  display: grid;
+  grid-template-rows: repeat(8, 12.5%);
+}
+
+/* TOOLBOX RULES  */
+
+.inputs {
+  margin: 3px;
+  box-sizing: border-box;
+}
+
+.inputs input {
+  height: calc(100% - 3px);
+  width: 55%;
+
+  text-align: center;
+
+  font-size: 2rem;
+
+  color: white;
+
+  padding: 0px;
+  padding-left: 10px;
+
+  background: none;
+  border: none;
+}
+
+.inputs input:focus {
+  outline: none;
+}
+
+.inputs button {
+  height: calc(100% - 3px);
+  float: right;
+  width: 40%;
+
+  font-size: 1.5rem;
+  color: white;
+
+  background-color: var(--yellow);
   border: none;
   cursor: pointer;
-
-  margin: 5px;
-
-  background-color: #424242;
 }
 
-body > button {
-  font-size: 1.5rem;
-  border: 3px solid black;
-  border-radius: 3px;
-  padding: 5px 10px;
+/* --------------------------------- */
+
+/* LETTER BUTTON RULES  */
+
+.btnrow {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+}
+
+.btn-container {
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+.letterbtn {
+  background-color: var(--empty);
+  border: none;
+  margin: 0px;
+
+  width: 100%;
+  height: 100%;
+
+  color: var(--text);
+
   cursor: pointer;
 
-  margin-bottom: 50px;
+  font-size: 3rem;
 }
 
-.foundWord {
-  background-color: white;
-  font-size: 1.5rem;
-  padding: 6px 12px;
-  margin: 2px;
+/* BUTTON  */
+
+.generate {
+  background-color: var(--green);
+  border: none;
+  margin: 3px;
+
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
 }

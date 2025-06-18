@@ -10,21 +10,118 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Oswald:wght@200..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="responsive.css">
 </head>
 <body>
-    <h1 class="oswald" style="font-size: 3.5rem;">Wordle Pattern Generator</h1>
-    <span class="rubik">Daily word:</span>
-    <input type="text" id="word">
-    <div class="pattern-buttons">
-        <button onclick="toggleBox(0, this)"></button>
-        <button onclick="toggleBox(1, this)"></button>
-        <button onclick="toggleBox(2, this)"></button>
-        <button onclick="toggleBox(3, this)"></button>
-        <button onclick="toggleBox(4, this)"></button>
-    </div>
-    <button onclick="returnPattern()" class="rubik">Find words</button>
-    
-    <div id="wordlist">
+    <div class="buttons">
+        <div class="inputs">
+            <input type="text" class="rubik" placeholder="DAILY WORD" id="dailyword">
+            <button class="rubik" onclick="toggleStrict(this)">STRICT</button>
+        </div>
+        <div class="btnrow">
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 0, 0)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 0, 1)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 0, 2)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 0, 3)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 0, 4)"></button>
+            </div>
+        </div>
+        <div class="btnrow">
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 1, 0)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 1, 1)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 1, 2)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 1, 3)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 1, 4)"></button>
+            </div>
+        </div>
+        <div class="btnrow">
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 2, 0)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 2, 1)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 2, 2)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 2, 3)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 2, 4)"></button>
+            </div>
+        </div>
+        <div class="btnrow">
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 3, 0)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 3, 1)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 3, 2)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 3, 3)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 3, 4)"></button>
+            </div>
+        </div>
+        <div class="btnrow">
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 4, 0)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 4, 1)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 4, 2)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 4, 3)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 4, 4)"></button>
+            </div>
+        </div>
+        <div class="btnrow">
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 5, 0)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 5, 1)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 5, 2)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 5, 3)"></button>
+            </div>
+            <div class="btn-container">
+                <button class="letterbtn rubik" onclick="changeSpot(this, 5, 4)"></button>
+            </div>
+        </div>
+        <button class="generate rubik" onclick="generateWords()">GENERATE</button>
     </div>
 
     <script src="script.js"></script>
