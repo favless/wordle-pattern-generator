@@ -51,6 +51,12 @@ body {
     }
 }
 
+@media screen and (max-height: 730px) {
+    .inputs input {
+      font-size: 1.7rem !important;
+    }
+}
+
 @media screen and (max-height: 650px) {
     .buttons {
         height: 95dvh !important;
@@ -60,6 +66,12 @@ body {
 @media screen and (max-height: 540px) {
     .letterbtn {
       font-size: 2.5rem !important;
+    }
+}
+
+@media screen and (max-height: 520px) {
+    .inputs input {
+      font-size: 1.3rem !important;
     }
 }
 
